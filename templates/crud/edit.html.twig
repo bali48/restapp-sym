@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block title %}Edit Movie{% endblock %}
+
+{% block body %}
+    <h1>Edit Movie</h1>
+
+    {{ include('crud/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('crud_list') }}">back to list</a>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        $(function () {
+            $.ajax({
+                url: "http://symapi.rest/api/movies/"+ {{ id }},
+                type: "GET",
+            }).done(function(data) {
+                console.log('data',data);
+                $('#movie_name').val(data.name);
+                $('#movie_description').val(data.description);
+            });
+        });
+
+            $('#crud_form').on("submit",function(e){
+                e.preventDefault();
+                // let data = {};
+                // $(this).serializeArray().forEach((object)=>{
+                //     data[object.name] = object.value;
+                // });
+                console.log({"name":$('#movie_name').val(),"description":$('#movie_description').val()});
+                $.ajax({
+                    url: "http://symapi.rest/api/movie/"+ {{ id }},
+                    type: "PUT",
+                    dataType : 'json',
+                    // data : JSON.stringify(data),
+                    data : {"name": $('#movie_name').val(),"description": $('#movie_description').val()},
+                    success: function(data1,status) {
+                        // Replace current position field ...
+
+                        // Position field now displays the appropriate positions.
+                    },
+                    error: function (e) {
+                        console.log('error',e);
+                    }
+                });
+            });
+
+
+        // $.ajax({
+        //
+        //     data: { id : menuId }
+        // }).done(function(msg) {
+        //
+        // }).fail(function( jqXHR, textStatus ) {
+        //     alert( "Request failed: " + textStatus );
+        // });
+    </script>
+{% endblock %}

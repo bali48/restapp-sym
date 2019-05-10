@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h3>Available Movies</h3>
+    <a class="btn btn-sm btn-primary pull-right" href="{{ path('crud_new') }}">Add New</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sr#</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    var temp;
+    $(function () {
+        $.ajax({
+            url: "http://symapi.rest/api/movies",
+            type: "GET",
+        }).done(function(data) {
+            console.log('data',data);
+            var html = '';
+            // alert(JSON.stringify(data));
+            $.each( data, function( key, value ) {
+                var editurl = 'http://symapp.rest/crud/'+value.id;
+                html+='<tr>\n' +
+                    '            <td scope="col">'+(key+1)+'</td>\n' +
+                    '            <td scope="col">'+value.name+'</td>\n' +
+                    '            <td scope="col">'+value.description+'</td>\n' +
+                    '            <td><a href="'+editurl+'" class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>\n'+
+                    '           <a href="javascript:void(0);" onclick="deleterecord('+value.id+')" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>\n'+
+                    '           </td>\n' +
+                    '        </tr>'
+            });
+            $('tbody').html(html);
+        });
+    });
+
+    var deleterecord = function(id){
+        if (confirm("Are you sure?")) {
+            $.ajax({
+                url: "http://symapi.rest/api/movie/"+id,
+                type: "DELETE",
+            }).done(function(data){
+                location.reload();
+            });
+        }
+        return false;
+    };
+</script>
+{% endblock %}

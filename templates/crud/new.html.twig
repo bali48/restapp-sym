@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+{% block title %}New Movie{% endblock %}
+
+{% block body %}
+    <h1>Add new Movie</h1>
+
+    {{ include('crud/_form.html.twig') }}
+
+    <a href="{{ path('crud_list') }}">back to list</a>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // $("#ticket_new").on("submit", function(e){
+        //     e.preventDefault();
+        //     let data = {};
+        //     $(this).serializeArray().forEach((object)=>{
+        //         data[object.name] = object.value;
+        //     });
+        //     console.log(data);
+        //
+        //     //TODO: ajax call here with data
+        //     //If ajax call fails because server can't decode
+        //     //Think of doing : data = JSON.stringify(data);
+        //     console.log(JSON.stringify(data));
+
+
+            $('#crud_form').on("submit",function(e){
+                e.preventDefault();
+                // let data = {};
+                // $(this).serializeArray().forEach((object)=>{
+                //     data[object.name] = object.value;
+                // });
+                console.log({"name":$('#movie_name').val(),"description":$('#movie_description').val()});
+                $.ajax({
+                    url: "http://symapi.rest/api/movie",
+                    type: "POST",
+                    dataType : 'json',
+                    // data : JSON.stringify(data),
+                    data : {"name": $('#movie_name').val(),"description": $('#movie_description').val()},
+                    success: function(data1,status) {
+                        // Replace current position field ...
+
+                        // Position field now displays the appropriate positions.
+                    },
+                    error: function (e) {
+                        console.log('error',e);
+                    }
+                });
+            });
+
+
+        // $.ajax({
+        //
+        //     data: { id : menuId }
+        // }).done(function(msg) {
+        //
+        // }).fail(function( jqXHR, textStatus ) {
+        //     alert( "Request failed: " + textStatus );
+        // });
+    </script>
+{% endblock %}
